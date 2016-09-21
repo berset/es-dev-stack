@@ -17,8 +17,9 @@ ADD http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/
 WORKDIR /usr/src/kernels
 RUN git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux
 WORKDIR linux
-RUN git checkout -b stable v`uname -r | sed -e "s/-.*//" | sed -e "s/\.[0]*$//"` && zcat /proc/config.gz > .config && make modules_prepare
-RUN sed -i -e "s/`uname -r | sed -e "s/-.*//" | sed -e "s/\.[0]??*$//"`/`uname -r`/" include/generated/utsrelease.h # In case a '+' was added
+ENV KERNEL_VERSION v4.7.1
+RUN git checkout -b stable $KERNEL_VERSION && zcat /proc/config.gz > .config && make modules_prepare
+#RUN sed -i -e "s/`uname -r | sed -e "s/-.*//" | sed -e "s/\.[0]??*$//"`/`uname -r`/" include/generated/utsrelease.h # In case a '+' was added
 
 # Nvidia drivers setup
 WORKDIR /opt/nvidia/
